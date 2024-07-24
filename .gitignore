@@ -5,6 +5,8 @@
 /public/storage
 /storage/*.key
 /vendor
+/deploy/pgdata
+/deploy/redisdata
 .env
 .env.backup
 .env.production

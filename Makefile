@@ -34,3 +34,15 @@ dc_rebuild_up:
 
 app_bash:
 	${DOCKER_COMPOSE} exec -u www-data app bash
+
+app_doc_generate:
+	${DOCKER_COMPOSE} exec -u www-data app php artisan l5-swagger:generate
+
+app_install:
+	make dc_build dc_up
+	${DOCKER_COMPOSE} exec -u www-data app cp .env.example .env
+	${DOCKER_COMPOSE} exec -u www-data app composer install
+	${DOCKER_COMPOSE} exec -u www-data app php artisan migrate
+	${DOCKER_COMPOSE} exec -u www-data app php artisan airports:import
+	${DOCKER_COMPOSE} exec -u www-data app php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
+	make app_doc_generate
