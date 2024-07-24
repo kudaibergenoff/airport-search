@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  app:
+    build:
+      context: ./deploy/php/
+      dockerfile: local.Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www
+    networks:
+      - app-network
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: airport_search
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Aa123123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+networks:
+  app-network:
+volumes:
+  pgdata:
