@@ -35,6 +35,9 @@ dc_rebuild_up:
 app_bash:
 	${DOCKER_COMPOSE} exec -u www-data app bash
 
+app_airports_import:
+	${DOCKER_COMPOSE} exec -u www-data app php artisan airports:import
+
 app_doc_generate:
 	${DOCKER_COMPOSE} exec -u www-data app php artisan l5-swagger:generate
 

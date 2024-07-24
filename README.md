@@ -24,6 +24,11 @@ make dc_build
 make dc_up
 ```
 
+### Запуск команды импортирование список аэропортов
+```shell
+make app_airports_import
+```
+
 ### Остановка и удаление контейнеров
 ```shell
 make dc_down
