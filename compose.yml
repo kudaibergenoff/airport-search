@@ -19,6 +19,7 @@ services:
       - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - app
+      - redis
     networks:
       - airport-search
   db:
@@ -32,6 +33,16 @@ services:
       - "5432:5432"
     volumes:
       - ./deploy/pgdata:/var/lib/postgresql/data
+    networks:
+      - airport-search
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./deploy/redisdata:/data
+    restart: unless-stopped
     networks:
       - airport-search
 networks:
