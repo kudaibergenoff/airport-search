@@ -1,0 +1,39 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Airport Search API",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/search": {
+            "get": {
+                "tags": [
+                    "Поиск аэропортов"
+                ],
+                "summary": "Список аэропортов",
+                "operationId": "b9b0327e88cfbe5741245ee3d9ef992c",
+                "parameters": [
+                    {
+                        "name": "query",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Поиск аэропортов",
+            "description": "Поиск аэропортов"
+        }
+    ]
+}
