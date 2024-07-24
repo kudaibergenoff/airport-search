@@ -1,28 +1,38 @@
-version: '3.9'
 services:
   app:
     build:
       context: ./deploy/php/
       dockerfile: local.Dockerfile
-    ports:
-      - "8000:8000"
     volumes:
       - .:/var/www
+      - ./deploy/php/php.ini:/usr/local/etc/php/conf.d/php.ini
     networks:
-      - app-network
+      - airport-search
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - ${NGINX_HOST_HTTP_PORT}:80
+    volumes:
+      - .:/var/www:rw
+      - ./deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - app
+    networks:
+      - airport-search
   db:
     image: postgres:15-alpine
+    restart: always
     environment:
-      POSTGRES_DB: airport_search
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: Aa123123
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ./deploy/pgdata:/var/lib/postgresql/data
     networks:
-      - app-network
+      - airport-search
 networks:
-  app-network:
-volumes:
-  pgdata:
+  airport-search:
