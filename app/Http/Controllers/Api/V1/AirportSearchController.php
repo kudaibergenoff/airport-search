@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Domain\Repositories\AirportRepositoryInterface;
+use App\Domain\Services\AirportServiceInterface;
 use App\Http\Controllers\Controller;
-use App\Models\Airport;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @OA\Info(title="Airport Search API", version="1.0")
  */
 class AirportSearchController extends Controller
 {
-    public function __construct(private AirportRepositoryInterface $airportRepository){}
+    public function __construct(private readonly AirportServiceInterface $airportService){}
     /**
      * @OA\Get (
      ** path="/api/search",
@@ -35,13 +34,13 @@ class AirportSearchController extends Controller
      *
      * @return JsonResponse
      */
-    public function airportSearch(Request $request): \Illuminate\Http\JsonResponse
+    public function airportSearch(Request $request): JsonResponse
     {
         $query = $request->input('query');
         $cacheKey = 'airports_search_' . $query;
 
         $airports = cache()->remember($cacheKey, 60, function () use ($query) {
-            return $this->airportRepository->search($query);
+            return $this->airportService->search($query);
         });
 
         return response()->json($airports);
